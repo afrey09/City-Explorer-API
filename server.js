@@ -65,10 +65,6 @@ app.get('/weather', async (req, res, next) => {
 
     //let groomedData = weatherResults.data.results.map(dayObj => new Weather(dayObj));
 
-    
-
-  
-
     //TODO use a class to minify the bulky data
     let weatherData = weatherResults.data.data.map(dayObj => new Forecast(dayObj));
 
@@ -108,8 +104,8 @@ class Forecast {
 }
 class Movies {
   constructor(cityObj) {
-    this.name=cityObj.original_title;
-    this.description=cityObj.overview;
+    this.title=cityObj.original_title;
+    this.overview=cityObj.overview;
   }
 }
 
