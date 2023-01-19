@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 console.log('First server');
 
@@ -10,7 +10,7 @@ const getWeather = require('./modules/weather.js');
 const getMovie = require('./modules/movie.js');
 
 //*** FOR LAB - DON'T FORGET TO REQUIRE YOUR START JSON FILE *** 
-let data = require('./data/weather.json');
+//let data = require('./data/weather.json');
 
 
 
