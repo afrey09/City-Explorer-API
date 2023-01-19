@@ -3,10 +3,10 @@
 console.log('First server');
 
 //**** REQUIRES ****
-const axios = require('axios');
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
+const getWeather = require('./modules/weather.js');
 
 //*** FOR LAB - DON'T FORGET TO REQUIRE YOUR START JSON FILE *** 
 let data = require('./data/weather.json');
@@ -47,34 +47,7 @@ app.get('/hello', (request, response) => {
 });
 
 
-
-
-
-app.get('/weather', async (req, res, next) => {
-  try {
-    let lat = req.query.lat;
-    let lon = req.query.lon;
-    let searchQuery = req.query.searchQuery;
-
-    let url = `http://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.REACT_APP_WEATHER_API_KEY}&lat=${lat}&lon=${lon}&days=5&units=I`;
-
-    let weatherResults = await axios.get(url);
-    console.log('weather results', weatherResults.data);
-
-    //TODO groom the data
-
-    //let groomedData = weatherResults.data.results.map(dayObj => new Weather(dayObj));
-
-    //TODO use a class to minify the bulky data
-    let weatherData = weatherResults.data.data.map(dayObj => new Forecast(dayObj));
-
-    res.status(200).send(weatherData);
-
-
-  } catch (error) {
-    next(error);
-  }
-});
+app.get('/weather', getWeather);
 
 app.get('/movies', async (req, res, next) => {
   try {
