@@ -3,6 +3,7 @@
 console.log('First server');
 
 //**** REQUIRES ****
+const axios = require('axios');
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
@@ -49,17 +50,29 @@ app.get('/hello', (request, response) => {
 
 
 
-app.get('/weather', (req, res, next) => {
+app.get('/weather', async (req, res, next) => {
   try {
     let lat = req.query.lat;
     let lon = req.query.lon;
     let searchQuery = req.query.searchQuery;
 
-    let dataToGroom = data.find(city => city.city_name.toLowerCase() === searchQuery.toLowerCase());
-    
-    let dataToSend = new Forecast(dataToGroom);
+    let url = `http://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.REACT_APP_WEATHER_API_KEY}&lat=${lat}&lon=${lon}&days=5&units=I`;
 
-    res.status(200).send(dataToSend);
+    let weatherResults = await axios.get(url);
+    console.log('weather results', weatherResults.data);
+
+    //TODO groom the data
+
+    //let groomedData = weatherResults.data.results.map(dayObj => new Weather(dayObj));
+
+    
+
+  
+
+    //TODO use a class to minify the bulky data
+    let weatherData = weatherResults.data.data.map(dayObj => new Forecast(dayObj));
+
+    res.status(200).send(weatherData);
 
 
   } catch (error) {
@@ -67,16 +80,38 @@ app.get('/weather', (req, res, next) => {
   }
 });
 
+app.get('/movies', async (req, res, next) => {
+  try {
 
-//**** CLASS TO GROOM BULKY DATA */
+    let searchQuery = req.query.searchQuery;
+
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_API_KEY}&include_adult=false&query=${searchQuery}`;
+
+    let movieResults = await axios.get(url);
+
+    //TODO groom the data
+
+    let groomedMovieData = movieResults.data.results.map(cityObj => new Movies(cityObj));
+
+    res.status(200).send(groomedMovieData);
+  } catch (error) {
+    next(error);
+  }
+});
+//**** FORECAST CLASS TO GROOM BULKY DATA */
 
 class Forecast {
-  constructor(forecastObj) {
-    this.date = forecastObj.date;
-    this.description = forecastObj.description;
+  constructor(dayObj) {
+    this.date = dayObj.valid_date;
+    this.description = dayObj.weather.description;
   }
 }
-
+class Movies {
+  constructor(cityObj) {
+    this.name=cityObj.original_title;
+    this.description=cityObj.overview;
+  }
+}
 
 //**** CATCH ALL ENDPOINT - NEEDS TO BE YOUR LAST DEFINED ENDPOINT **** 
 
