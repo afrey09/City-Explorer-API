@@ -1,3 +1,3 @@
 # City-Explorer-API
 
-![WRRC](./Modules/images/WRRC.jpg)
+![WRRC](./Modules/images/wrrc.jpg)
