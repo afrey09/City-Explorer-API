@@ -6,8 +6,8 @@ console.log('First server');
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const getWeather = require('./modules/weather.js');
-const getMovie = require('./modules/movie.js');
+const getWeather = require('./Modules/weather.js');
+const getMovie = require('./Modules/movie.js');
 
 //*** FOR LAB - DON'T FORGET TO REQUIRE YOUR START JSON FILE *** 
 //let data = require('./data/weather.json');
